@@ -20,6 +20,25 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Two things the page reaches for only at runtime: the smooth-scroll module
+      # loaded through an importmap, and the 3D ability card that lives inside an iframe.
+      - name: Pull runtime-only bundles
+        run: |
+          sudo apt-get -qq update >/dev/null 2>&1 || true
+          sudo apt-get -qq install -y wget >/dev/null 2>&1 || true
+          mkdir -p vendor
+          curl -sS -L --max-time 60 --retry 2 -o vendor/lenis.min.mjs \
+            "https://therishithakor.com/vendor/lenis.min.mjs" || true
+          ls -la vendor/
+          wget --no-verbose --no-check-certificate -e robots=off \
+            --recursive --level=5 --page-requisites --adjust-extension --convert-links \
+            --no-host-directories --directory-prefix=. \
+            --timeout=25 --tries=2 --waitretry=2 \
+            "https://therishithakor.com/ability-card/" 2>&1 | tail -25 || true
+          echo "--- ability-card tree ---"
+          find ability-card -type f 2>/dev/null | head -40 || true
+          du -sh ability-card 2>/dev/null || true
+
       - name: Find referenced-but-missing media and fetch it
         run: |
           python3 - <<'PY'
