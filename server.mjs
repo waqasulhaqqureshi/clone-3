@@ -55,6 +55,11 @@ async function resolve (pathname) {
 
   if (clean === '/' || clean === '') return { file: path.join(ROOT, 'home.html'), status: 200 }
 
+  // the address bar reads /home, /work and /my-story while scrolling the landing page
+  if (clean === '/work' || clean === '/my-story' || clean === '/work/' || clean === '/my-story/') {
+    return { file: path.join(ROOT, 'home.html'), status: 200 }
+  }
+
   const candidates = [target]
   if (!path.extname(clean)) {
     candidates.push(target + '.html', path.join(target, 'index.html'))

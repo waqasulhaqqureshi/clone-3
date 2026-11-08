@@ -39,6 +39,9 @@ jobs:
           find ability-card -type f 2>/dev/null | head -40 || true
           du -sh ability-card 2>/dev/null || true
 
+      - name: Walk the module graph for anything still missing
+        run: python3 tools/sync_runtime.py
+
       - name: Find referenced-but-missing media and fetch it
         run: |
           python3 - <<'PY'
