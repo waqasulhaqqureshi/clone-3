@@ -54,6 +54,10 @@ same copy, same spacing, same motion. No redesigns, no new sections, no personal
 - `formatClock` / `readTheme` / `readStored` / `writeStored` now live in `src/utils/site.ts`.
   `STORY_ITEMS` at the top of `src/App.tsx` holds the timeline copy.
 
+- **Doors** — opening a door now reveals that skill's three work rows inside the room
+  (see `SECTION-DOORS-WORK.md`). The projects are **placeholders**; replace the
+  `inside` arrays in `DOOR_ITEMS` and the CSS-drawn `.inside__thumb` motifs with real work.
+
 ## Your task, in this order
 
 1. Add the **ability card overlay** (`#card`): the trigger under the hero content, a
