@@ -24,8 +24,56 @@ const NAV_ITEMS = [
   { label: "App Development", href: "#app-development" },
   { label: "UI/UX Design", href: "#ui-ux-design" },
   { label: "Graphic Design", href: "#graphic-design" },
-  { label: "My story", href: "#about" },
+  { label: "Photography", href: "#photography" },
   { label: "Contact", href: "mailto:rishithakor218@gmail.com" },
+];
+
+const DOOR_ITEMS = [
+  {
+    id: "web-development",
+    label: "Web Developer",
+    title: "Web Development",
+    summary: "End to end, from sketch to live site",
+    services: ["Discovery & planning", "UX & visual design", "Front-end & back-end development", "Technical SEO & performance", "Analytics, launch & ongoing support"],
+    color: "#22304a",
+    darkColor: "#1c2840",
+  },
+  {
+    id: "app-development",
+    label: "App Developer",
+    title: "App Development",
+    summary: "From the first idea to the app store",
+    services: ["Product scoping & user flows", "Interface design", "Cross-platform development", "Device testing & store launch", "Analytics, monitoring & updates"],
+    color: "#4a3540",
+    darkColor: "#3f2d37",
+  },
+  {
+    id: "ui-ux-design",
+    label: "UI/UX Designer",
+    title: "UI/UX Design",
+    summary: "Research first, pixels second",
+    services: ["Brand & business needs analysis", "User & competitor research", "Information architecture & flows", "Wireframes & high-fidelity UI", "Interactive prototypes & testing"],
+    color: "#7a8670",
+    darkColor: "#66705d",
+  },
+  {
+    id: "graphic-design",
+    label: "Graphic Designer",
+    title: "Graphic Design",
+    summary: "Visual content true to the brand",
+    services: ["Brand, audience & tone analysis", "Built around brand guidelines", "Posters & social media creatives", "Strong type & clear hierarchy", "Every format each platform needs"],
+    color: "#a4552c",
+    darkColor: "#8c4826",
+  },
+  {
+    id: "photography",
+    label: "Photographer",
+    title: "Photography",
+    summary: "The eye behind every layout",
+    services: ["Architecture, concerts & sport", "Nature & product", "Light & composition first"],
+    color: "#262523",
+    darkColor: "#201f1d",
+  },
 ];
 
 type Theme = "light" | "dark";
@@ -438,6 +486,161 @@ function PullCord({ theme, onToggle }: { theme: Theme; onToggle: () => void }) {
   );
 }
 
+function WorkDoors() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLUListElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const activeDoor = DOOR_ITEMS[activeIndex];
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+    if (!section || !viewport || !track) return;
+
+    let revealObserver: IntersectionObserver | null = null;
+    if ("IntersectionObserver" in window) {
+      revealObserver = new IntersectionObserver((entries, observer) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            setIsVisible(true);
+            observer.disconnect();
+          }
+        }, { threshold: 0.18 });
+      revealObserver.observe(section);
+    } else {
+      setIsVisible(true);
+    }
+
+    let frame = 0;
+    const syncWall = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        if (window.matchMedia("(min-width: 1024px)").matches) {
+          const travel = Math.max(1, section.offsetHeight - window.innerHeight);
+          const progress = Math.min(1, Math.max(0, -section.getBoundingClientRect().top / travel));
+          const distance = Math.max(0, track.scrollWidth - viewport.clientWidth);
+          const nextIndex = Math.round(progress * (DOOR_ITEMS.length - 1));
+          track.style.transform = `translate3d(${-distance * progress}px, 0, 0)`;
+          setActiveIndex((current) => current === nextIndex ? current : nextIndex);
+          return;
+        }
+
+        track.style.transform = "";
+        const center = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+        const doors = Array.from(track.children) as HTMLElement[];
+        let nearest = 0;
+        let nearestDistance = Number.POSITIVE_INFINITY;
+        doors.forEach((door, index) => {
+          const bounds = door.getBoundingClientRect();
+          const distance = Math.abs(bounds.left + bounds.width / 2 - center);
+          if (distance < nearestDistance) {
+            nearest = index;
+            nearestDistance = distance;
+          }
+        });
+        setActiveIndex((current) => current === nearest ? current : nearest);
+      });
+    };
+
+    window.addEventListener("scroll", syncWall, { passive: true });
+    window.addEventListener("resize", syncWall, { passive: true });
+    viewport.addEventListener("scroll", syncWall, { passive: true });
+    const resizeObserver = new ResizeObserver(syncWall);
+    resizeObserver.observe(viewport);
+    resizeObserver.observe(track);
+    syncWall();
+
+    return () => {
+      revealObserver?.disconnect();
+      resizeObserver.disconnect();
+      window.removeEventListener("scroll", syncWall);
+      window.removeEventListener("resize", syncWall);
+      viewport.removeEventListener("scroll", syncWall);
+      window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  const selectDoor = (index: number) => {
+    setActiveIndex(index);
+    setOpenIndex((current) => current === index ? null : index);
+  };
+
+  return (
+    <section ref={sectionRef} className={`doors ${isVisible ? "is-visible" : ""}`} id="works" aria-labelledby="doorsTitle">
+      <div className="doors__tex" aria-hidden="true" />
+      <div className="doors__pin">
+        <div className="shell doors__wall">
+          <div className="doors__heading">
+            <h2 className="paint" id="doorsTitle">Magic happens <br className="mbr" />behind the doors</h2>
+            <p className="doors__hint">Swipe along the wall</p>
+          </div>
+
+          <div className="doors__viewport" ref={viewportRef} role="region" aria-label="Explore Rishi's services">
+            <ul className="doors__row" ref={trackRef}>
+              {DOOR_ITEMS.map((door, index) => (
+                <li
+                  className={`unit${activeIndex === index ? " is-active" : ""}${openIndex === index ? " is-open" : ""}`}
+                  id={door.id}
+                  key={door.id}
+                  style={{ "--i": index, "--door": door.color, "--door-dk": door.darkColor } as StyleWithVars}
+                >
+                  <button
+                    className="doorway"
+                    type="button"
+                    aria-label={`${openIndex === index ? "Close" : "Open"} the ${door.label} door`}
+                    aria-controls="door-information"
+                    aria-expanded={openIndex === index}
+                    onPointerEnter={() => setActiveIndex(index)}
+                    onFocus={() => setActiveIndex(index)}
+                    onClick={() => selectDoor(index)}
+                  >
+                    <span className="casing" />
+                    <span className="opening">
+                      <span className="room"><span className="room__light" /></span>
+                      <span className="spill" />
+                      <span className="door">
+                        <span className="door__flute" />
+                        <span className="plate">{door.label}</span>
+                        <span className="handle"><span className="handle__lever" /><span className="handle__lock" /></span>
+                        <span className="door__shade" />
+                        <span className="leak" />
+                      </span>
+                      <span className="sill" />
+                    </span>
+                    <span className="pool" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="doors__footer" id="door-information" aria-live="polite">
+            <div className="doors__counter" aria-hidden="true">
+              <span>{String(activeIndex + 1).padStart(2, "0")}</span>
+              <i><b style={{ transform: `scaleX(${(activeIndex + 1) / DOOR_ITEMS.length})` }} /></i>
+              <span>05</span>
+            </div>
+            <div className="dinfo" key={activeDoor.id}>
+              <h3 className="dinfo__h">{activeDoor.title}</h3>
+              <p className="dinfo__t">{activeDoor.summary}</p>
+            </div>
+            <ul className="dinfo__p" key={`${activeDoor.id}-list`}>
+              {activeDoor.services.map((service, index) => (
+                <li key={service} style={{ "--i": index } as StyleWithVars}>{service}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="doors__floor" aria-hidden="true" />
+      </div>
+    </section>
+  );
+}
+
 export default function App() {
   const [theme, setTheme] = useState<Theme>(readTheme);
   const [isReady, setIsReady] = useState(false);
@@ -776,6 +979,8 @@ export default function App() {
           </span>
         </div>
       </main>
+
+      <WorkDoors />
 
       {menuOpen && <MenuOverlay onClose={closeMenu} />}
     </div>
