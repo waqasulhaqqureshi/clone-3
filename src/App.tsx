@@ -94,6 +94,11 @@ const DOOR_ITEMS = [
     services: ["Discovery & planning", "UX & visual design", "Front-end & back-end development", "Technical SEO & performance", "Analytics, launch & ongoing support"],
     color: "#22304a",
     darkColor: "#1c2840",
+    inside: [
+      { title: "Portfolio, from sketch", meta: "Design system · Next.js" },
+      { title: "Storefront rebuild", meta: "Commerce · Core Web Vitals" },
+      { title: "Booking flow", meta: "Forms · Payments" },
+    ],
   },
   {
     id: "app-development",
@@ -103,6 +108,11 @@ const DOOR_ITEMS = [
     services: ["Product scoping & user flows", "Interface design", "Cross-platform development", "Device testing & store launch", "Analytics, monitoring & updates"],
     color: "#4a3540",
     darkColor: "#3f2d37",
+    inside: [
+      { title: "Habit tracker", meta: "iOS · SwiftUI" },
+      { title: "Expense splitter", meta: "Cross-platform · React Native" },
+      { title: "Onboarding revamp", meta: "Product scoping · Flows" },
+    ],
   },
   {
     id: "ui-ux-design",
@@ -112,6 +122,11 @@ const DOOR_ITEMS = [
     services: ["Brand & business needs analysis", "User & competitor research", "Information architecture & flows", "Wireframes & high-fidelity UI", "Interactive prototypes & testing"],
     color: "#7a8670",
     darkColor: "#66705d",
+    inside: [
+      { title: "Fintech dashboard", meta: "Research · Figma" },
+      { title: "Travel planner flows", meta: "IA · Prototyping" },
+      { title: "Design system audit", meta: "Usability · Components" },
+    ],
   },
   {
     id: "graphic-design",
@@ -121,6 +136,11 @@ const DOOR_ITEMS = [
     services: ["Brand, audience & tone analysis", "Built around brand guidelines", "Posters & social media creatives", "Strong type & clear hierarchy", "Every format each platform needs"],
     color: "#a4552c",
     darkColor: "#8c4826",
+    inside: [
+      { title: "Real-estate carousels", meta: "Social · Illustrator" },
+      { title: "Luxury bottle campaign", meta: "Brand · Art direction" },
+      { title: "Pitch deck series", meta: "Type · Hierarchy" },
+    ],
   },
   {
     id: "photography",
@@ -130,6 +150,11 @@ const DOOR_ITEMS = [
     services: ["Architecture, concerts & sport", "Nature & product", "Light & composition first"],
     color: "#262523",
     darkColor: "#201f1d",
+    inside: [
+      { title: "Architecture set", meta: "Lines · Concrete" },
+      { title: "Concert night", meta: "Stage light · Grain" },
+      { title: "Product on stone", meta: "Still life · Studio" },
+    ],
   },
 ];
 
@@ -605,6 +630,12 @@ function WorkDoors() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const activeDoor = DOOR_ITEMS[activeIndex];
+  const openRef = useRef<number | null>(null);
+  const pinnedRef = useRef(0);
+
+  useEffect(() => {
+    openRef.current = openIndex;
+  }, [openIndex]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -634,8 +665,12 @@ function WorkDoors() {
           const travel = Math.max(1, section.offsetHeight - window.innerHeight);
           const progress = Math.min(1, Math.max(0, -section.getBoundingClientRect().top / travel));
           const distance = Math.max(0, track.scrollWidth - viewport.clientWidth);
-          const nextIndex = Math.round(progress * (DOOR_ITEMS.length - 1));
-          track.style.transform = `translate3d(${-distance * progress}px, 0, 0)`;
+          /* While a door is open the wall holds still, otherwise the very
+             scroll you use to read the work would slide the door away. */
+          const target = openRef.current !== null ? pinnedRef.current : progress;
+          pinnedRef.current = target;
+          const nextIndex = Math.round(target * (DOOR_ITEMS.length - 1));
+          track.style.transform = `translate3d(${-distance * target}px, 0, 0)`;
           setActiveIndex((current) => current === nextIndex ? current : nextIndex);
           return;
         }
@@ -675,10 +710,37 @@ function WorkDoors() {
     };
   }, []);
 
+  useEffect(() => {
+    if (openIndex === null) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpenIndex(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [openIndex]);
+
   const selectDoor = (index: number) => {
+    cancelClose();
     setActiveIndex(index);
-    setOpenIndex((current) => current === index ? null : index);
+    setOpenIndex((current) => (current === index ? null : index));
   };
+
+  /* Leaving the neighbourhood of an open door closes it again, so the wall
+     never sits there with a gaping hole in your peripheral vision. The delay
+     forgives a cursor that clips a corner on its way to the text, and touch
+     pointer-leave is ignored so a tap never closes the door it just opened. */
+  const closeTimer = useRef(0);
+  const cancelClose = () => window.clearTimeout(closeTimer.current);
+
+  const scheduleClose = (index: number, pointerType?: string) => {
+    if (pointerType && pointerType !== "mouse") return;
+    cancelClose();
+    closeTimer.current = window.setTimeout(() => {
+      setOpenIndex((current) => (current === index ? null : current));
+    }, 420);
+  };
+
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
 
   return (
     <section ref={sectionRef} className={`doors ${isVisible ? "is-visible" : ""}`} id="works" aria-labelledby="doorsTitle">
@@ -699,31 +761,92 @@ function WorkDoors() {
                   key={door.id}
                   style={{ "--i": index, "--door": door.color, "--door-dk": door.darkColor } as StyleWithVars}
                 >
-                  <button
+                  <div
                     className="doorway"
-                    type="button"
-                    aria-label={`${openIndex === index ? "Close" : "Open"} the ${door.label} door`}
-                    aria-controls="door-information"
-                    aria-expanded={openIndex === index}
-                    onPointerEnter={() => setActiveIndex(index)}
-                    onFocus={() => setActiveIndex(index)}
-                    onClick={() => selectDoor(index)}
+                    onPointerEnter={() => {
+                      cancelClose();
+                      setActiveIndex(index);
+                    }}
+                    onPointerOut={(event) => {
+                      /* pointerout (not leave): it is the event React reliably
+                         delivers, and the containment check turns it into a
+                         true "left the doorway" signal. */
+                      const next = event.relatedTarget as Node | null;
+                      if (next && event.currentTarget.contains(next)) return;
+                      scheduleClose(index, event.pointerType);
+                    }}
                   >
                     <span className="casing" />
                     <span className="opening">
-                      <span className="room"><span className="room__light" /></span>
+                      <span className="room">
+                        <span className="room__light" />
+                        {/* The work that lives behind this door. It is real
+                            content, so it sits in the DOM and only becomes
+                            reachable once the leaf has swung clear. */}
+                        <span className="inside" aria-hidden={openIndex === index ? undefined : true}>
+                          <span className="inside__top">
+                            <span className="inside__label">{door.title}</span>
+                            <button
+                              className="inside__close"
+                              type="button"
+                              onClick={() => setOpenIndex(null)}
+                              tabIndex={openIndex === index ? 0 : -1}
+                              aria-label={`Close the ${door.label} door`}
+                            >
+                              Close
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                                <path d="M5 5l14 14M19 5 5 19" />
+                              </svg>
+                            </button>
+                          </span>
+                          <span className="inside__list">
+                            {door.inside.map((work, workIndex) => (
+                              <span
+                                className="inside__card"
+                                key={work.title}
+                                style={{ "--w": workIndex } as StyleWithVars}
+                              >
+                                <span className="inside__thumb" />
+                                <span className="inside__text">
+                                  <span className="inside__title">{work.title}</span>
+                                  <span className="inside__meta">{work.meta}</span>
+                                </span>
+                              </span>
+                            ))}
+                          </span>
+                          <a
+                            className="inside__more"
+                            href={`mailto:rishithakor218@gmail.com?subject=${encodeURIComponent(
+                              `${door.title} — case study`
+                            )}`}
+                            tabIndex={openIndex === index ? 0 : -1}
+                          >
+                            Ask about the full case study <i aria-hidden="true">↗</i>
+                          </a>
+                        </span>
+                      </span>
                       <span className="spill" />
                       <span className="door">
-                        <span className="door__flute" />
-                        <span className="plate">{door.label}</span>
-                        <span className="handle"><span className="handle__lever" /><span className="handle__lock" /></span>
-                        <span className="door__shade" />
-                        <span className="leak" />
+                        <button
+                          className="door__hit"
+                          type="button"
+                          aria-label={`${openIndex === index ? "Close" : "Open"} the ${door.label} door`}
+                          aria-controls="door-information"
+                          aria-expanded={openIndex === index}
+                          onClick={() => selectDoor(index)}
+                          onFocus={() => setActiveIndex(index)}
+                        >
+                          <span className="door__flute" />
+                          <span className="plate">{door.label}</span>
+                          <span className="handle"><span className="handle__lever" /><span className="handle__lock" /></span>
+                          <span className="door__shade" />
+                          <span className="leak" />
+                        </button>
                       </span>
                       <span className="sill" />
                     </span>
                     <span className="pool" />
-                  </button>
+                  </div>
                 </li>
               ))}
             </ul>
