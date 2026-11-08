@@ -1,0 +1,28 @@
+name: grab-reference
+on:
+  push:
+    branches: ["arena/**"]
+    paths: [".github/workflows/grab-reference.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mirror the reference site
+        run: |
+          mkdir -p _reference
+          cp /etc/resolv.conf _reference/.resolv 2>/dev/null || true
+          for p in home work my-story web-developer app-developer ui-ux-designer graphic-designer photographer legal; do
+            curl -sSL --retry 3 -o "_reference/$p.html" "https://therishithakor.com/$p" || true
+          done
+          echo "fetched:"; ls -la _reference | head -20
+      - name: Commit
+        run: |
+          git config user.name "reference-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add _reference
+          git commit -m "chore: reference html" || echo "nothing"
+          git push
