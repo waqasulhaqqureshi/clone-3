@@ -31,10 +31,12 @@ jobs:
             "https://therishithakor.com/vendor/lenis.min.mjs" || true
           ls -la vendor/
           wget --no-verbose --no-check-certificate -e robots=off \
-            --recursive --level=5 --page-requisites --adjust-extension --convert-links \
+            --recursive --level=5 --no-parent --page-requisites --adjust-extension --convert-links \
             --no-host-directories --directory-prefix=. \
             --timeout=25 --tries=2 --waitretry=2 \
             "https://therishithakor.com/ability-card/" 2>&1 | tail -25 || true
+          # the crawler likes to leave duplicates of the page behind
+          rm -rf .netlify '%23w' home.html.1 index.html.1 2>/dev/null || true
           echo "--- ability-card tree ---"
           find ability-card -type f 2>/dev/null | head -40 || true
           du -sh ability-card 2>/dev/null || true
