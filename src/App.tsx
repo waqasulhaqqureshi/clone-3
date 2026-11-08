@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
+import { formatClock, readStored, readTheme, writeStored } from "./utils/site";
+import type { Theme } from "./utils/site";
 
 const SKILLS = [
   "Web Developer",
@@ -25,7 +27,62 @@ const NAV_ITEMS = [
   { label: "UI/UX Design", href: "#ui-ux-design" },
   { label: "Graphic Design", href: "#graphic-design" },
   { label: "Photography", href: "#photography" },
-  { label: "Contact", href: "mailto:rishithakor218@gmail.com" },
+  { label: "Story", href: "#story" },
+  { label: "Contact", href: "#contact" },
+];
+
+const STORY_ITEMS = [
+  {
+    period: "Oct 2026 — Now",
+    role: "Independent freelancer",
+    org: "Working for myself, remote-first",
+    points: [
+      "Websites, iOS apps, interfaces and brand creatives, carried from the first sketch to launch.",
+      "Working directly with clients, wherever they are.",
+    ],
+    /* The odometer's final reading: the year this chapter starts. */
+    year: 2026,
+  },
+  {
+    period: "Jul 2026 — Sep 2026",
+    role: "Graphic designer",
+    org: "Himspring LLC",
+    points: [
+      "Managed visual content across social media handles for real estate, luxury water bottle and clothing brands.",
+      "Designed social media creatives, stories and carousels in Adobe Illustrator, keeping every brand consistent across platforms.",
+    ],
+    year: 2026,
+  },
+  {
+    period: "Jan 2026 — Jun 2026",
+    role: "UI/UX designer",
+    org: "Quicko Pvt Ltd, Ahmedabad",
+    points: [
+      "Designed website interfaces and user experiences in Figma, focused on usability, visual clarity and function.",
+      "Built no-code web pages and interactive financial tools in Framer, turning designs into working products.",
+    ],
+    year: 2026,
+  },
+  {
+    period: "Jan 2025 — May 2025",
+    role: "Graphic designer intern",
+    org: "WBT, Delhi · Remote",
+    points: [
+      "Designed pitch decks and presentations that communicate ideas and business concepts clearly.",
+      "Created social media creatives and visual assets for branding, marketing and digital communication.",
+    ],
+    year: 2025,
+  },
+  {
+    period: "Jul 2022 — May 2026",
+    role: "B.Tech, Computer Science",
+    org: "Pandit Deendayal Energy University (PDEU)",
+    points: [
+      "Four years of computer science: where it all started, with code in the classroom and design on the side.",
+      "Graduated in May 2026, with internships and real projects already under way.",
+    ],
+    year: 2022,
+  },
 ];
 
 const DOOR_ITEMS = [
@@ -76,31 +133,10 @@ const DOOR_ITEMS = [
   },
 ];
 
-type Theme = "light" | "dark";
 type StyleWithVars = CSSProperties & Record<`--${string}`, string | number>;
 
 function revealDelay(delay: string): StyleWithVars {
   return { "--d": delay };
-}
-
-function readTheme(): Theme {
-  try {
-    return localStorage.getItem("rishi-mode") === "dark" ? "dark" : "light";
-  } catch {
-    return "light";
-  }
-}
-
-function formatClock(date: Date) {
-  const hour = date.getHours();
-  const month = date.toLocaleString("en", { month: "long" });
-  const shortMonth = date.toLocaleString("en", { month: "short" });
-
-  return {
-    time: `${hour % 12 || 12}:${String(date.getMinutes()).padStart(2, "0")}${hour < 12 ? "am" : "pm"}`,
-    date: `${date.getDate()} ${month}, ${date.getFullYear()}`,
-    shortDate: `${date.getDate()} ${shortMonth}`,
-  };
 }
 
 function IntroLoader({ onReady }: { onReady: () => void }) {
@@ -716,6 +752,288 @@ function WorkDoors() {
   );
 }
 
+/* "My story" — a sticky heading over a scroll-driven odometer, then the
+   timeline. The digits scrub as the section travels, exactly like the
+   reference: each wheel is a 0-9 ladder translated by its own digit. */
+function StoryOdometer({ sectionRef }: { sectionRef: React.RefObject<HTMLElement | null> }) {
+  const [shown, setShown] = useState(0);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      setShown(STORY_ITEMS[0].year);
+      return;
+    }
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const bounds = section.getBoundingClientRect();
+      const travel = Math.max(1, bounds.height - window.innerHeight);
+      const progress = Math.min(1, Math.max(0, -bounds.top / travel));
+      /* 2021 is where the ladder starts: the earliest year in the story,
+         minus one so every wheel has to travel on the way in. */
+      const target = Math.round(STORY_ITEMS[STORY_ITEMS.length - 1].year - 1 + progress * 5);
+      setShown((current) => (current === target ? current : target));
+    };
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      window.cancelAnimationFrame(frame);
+    };
+  }, [sectionRef]);
+
+  const digits = String(Math.max(2021, Math.min(2029, shown))).padStart(4, "0").split("");
+
+  return (
+    <div className="odo" aria-hidden="true">
+      {digits.map((digit, digitIndex) => (
+        <span className="odo__wheel" key={digitIndex} style={{ "--d": `${digitIndex * 70}ms` } as StyleWithVars}>
+          {/* A 0-9 ladder; each wheel slides to the digit the scroll position asks for. */}
+          <span className="odo__roll" style={{ transform: `translate3d(0, ${-Number(digit) * 10}%, 0)` }}>
+            {Array.from({ length: 10 }, (_, n) => (
+              <span key={n}>{n}</span>
+            ))}
+          </span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function Story() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [active, setActive] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    if (!("IntersectionObserver" in window)) {
+      setVisible(true);
+      return;
+    }
+
+    const revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.08 }
+    );
+    revealObserver.observe(section);
+
+    const entries = Array.from(section.querySelectorAll<HTMLElement>(".entry"));
+    const entryObserver = new IntersectionObserver(
+      (records) => {
+        records.forEach((record) => {
+          if (!record.isIntersecting) return;
+          const index = entries.indexOf(record.target as HTMLElement);
+          if (index >= 0) setActive(index);
+        });
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+    );
+    entries.forEach((entry) => entryObserver.observe(entry));
+
+    return () => {
+      revealObserver.disconnect();
+      entryObserver.disconnect();
+    };
+  }, []);
+
+  const jumpTo = (index: number) => {
+    const entry = sectionRef.current?.querySelectorAll<HTMLElement>(".entry")[index];
+    entry?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  return (
+    <section
+      ref={sectionRef}
+      className={`story${visible ? " is-visible" : ""}`}
+      id="story"
+      aria-labelledby="storyTitle"
+    >
+      <div className="shell story__head">
+        <p className="story__eyebrow">
+          <span aria-hidden="true">◆</span> My story
+        </p>
+        <div className="story__titleRow">
+          <h2 className="story__title" id="storyTitle">
+            Let&rsquo;s go back in time.
+          </h2>
+          <StoryOdometer sectionRef={sectionRef} />
+        </div>
+      </div>
+
+      <div className="shell story__body">
+        <div className="story__rail" aria-hidden="true">
+          <span className="story__railTrack">
+            <span
+              className="story__railFill"
+              style={{ transform: `scaleY(${(active + 1) / STORY_ITEMS.length})` }}
+            />
+          </span>
+          <span className="story__railNo">
+            {String(active + 1).padStart(2, "0")}
+            <i>/ {String(STORY_ITEMS.length).padStart(2, "0")}</i>
+          </span>
+        </div>
+
+        <ol className="story__list">
+          {STORY_ITEMS.map((item, index) => (
+            <li
+              className={`entry${active === index ? " is-active" : ""}`}
+              key={item.period}
+              style={{ "--i": index } as StyleWithVars}
+            >
+              <button
+                className="entry__no"
+                type="button"
+                onClick={() => jumpTo(index)}
+                aria-label={`Jump to ${item.period}: ${item.role}`}
+              >
+                {String(index + 1).padStart(2, "0")}
+              </button>
+              <div className="entry__main">
+                <p className="entry__period">{item.period}</p>
+                <h3 className="entry__role">{item.role}</h3>
+                <p className="entry__org">{item.org}</p>
+                <ul className="entry__points">
+                  {item.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+function SiteFooter() {
+  const clock = useLocalClock();
+
+  return (
+    <footer className="foot" id="contact" aria-labelledby="footTitle">
+      <div className="shell">
+        <div className="foot__top">
+          <button
+            className="foot__back"
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            <span className="foot__backArrow" aria-hidden="true">↑</span>
+            Back to top
+          </button>
+          <a className="foot__enter" href="mailto:rishithakor218@gmail.com">
+            Click to enter
+            <span className="foot__enterBadge" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </span>
+          </a>
+        </div>
+
+        <div className="foot__mark">
+          <h2 className="foot__word" id="footTitle">
+            Rishi<span className="foot__dot">.</span>
+          </h2>
+          <p className="foot__tag">Web · App · UI/UX · Graphic design · Photography</p>
+        </div>
+
+        <div className="foot__bot">
+          <span className="foot__local">
+            Local time — <b>{clock}</b>
+          </span>
+          <span className="foot__meta">Independent freelancer · Remote-first, worldwide</span>
+          <a className="foot__hire" href="mailto:rishithakor218@gmail.com">
+            Hire me <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* Tiny clock hook, shared by the footer and the consent bar. */
+function useLocalClock() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 15_000);
+    return () => window.clearInterval(timer);
+  }, []);
+  return formatClock(now).time;
+}
+
+function ConsentBar() {
+  const [state, setState] = useState<"open" | "allowed" | "denied" | "closed">(() => {
+    const stored = readStored("rishi-consent");
+    if (stored === "allowed") return "allowed";
+    if (stored === "denied") return "denied";
+    return "open";
+  });
+  const [mounted, setMounted] = useState(false);
+  const [details, setDetails] = useState(false);
+
+  useEffect(() => {
+    if (state !== "open") return;
+    const timer = window.setTimeout(() => setMounted(true), 2400);
+    return () => window.clearTimeout(timer);
+  }, [state]);
+
+  if (state === "allowed" || state === "denied") return null;
+
+  const decide = (answer: "allowed" | "denied") => {
+    writeStored("rishi-consent", answer);
+    setState(answer);
+  };
+
+  return (
+    <div className={`consent${mounted ? " in" : ""}`} role="region" aria-label="Analytics consent">
+      <div className="consent__copy">
+        <p>
+          May I count your visit with Google Analytics? It sets cookies.{" "}
+          <button type="button" className="consent__details" onClick={() => setDetails((open) => !open)} aria-expanded={details}>
+            Details
+          </button>
+        </p>
+        {details && (
+          <p className="consent__more">
+            It records the pages you open, roughly where in the world you are and what device you
+            use. Nothing is sold or shared, and choosing “No thanks” keeps the whole site working.
+          </p>
+        )}
+      </div>
+      <div className="consent__actions">
+        <button type="button" onClick={() => decide("denied")}>
+          No thanks
+        </button>
+        <button type="button" className="consent__yes" onClick={() => decide("allowed")}>
+          Allow
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [theme, setTheme] = useState<Theme>(readTheme);
   const [isReady, setIsReady] = useState(false);
@@ -1147,6 +1465,12 @@ export default function App() {
       </main>
 
       <WorkDoors />
+
+      <Story />
+
+      <SiteFooter />
+
+      <ConsentBar />
 
       {menuOpen && <MenuOverlay onClose={closeMenu} />}
     </div>
