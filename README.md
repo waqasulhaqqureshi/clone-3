@@ -42,9 +42,13 @@ app-developer/                index.html + app-*.mp4, icons
 ui-ux-designer/               index.html + ux-*.mp4, shots
 graphic-designer/             index.html + ~40 print pieces (qod-*, him-*, kal-*, pos-*, wbt-*, logo-*)
 photographer/                 index.html + photos.js gallery data
-card/                         the "ability card" artwork (body, back, plate, sheen, win_bg, win_sub)
+card/                         card artwork used inline by the landing page
+ability-card/                 the 3d ability card (own iframe document + shrine scene)
+vendor/                       lenis smooth-scroll module and the three.js build it imports
 fonts/                        Onest variable woff2 (latin + latin-ext)
 legal/                        index.html + licenses.txt
+tools/sync_runtime.py         walks the module graph and pulls anything still missing
+ASSETS.txt                    size + path inventory of the whole tree
 ```
 
 ## What the site actually is
@@ -65,12 +69,28 @@ Any static host works. `vercel.json` enables clean URLs (`/home` → `home.html`
 `/web-developer` → `web-developer/index.html`); Netlify does the same by default
 (`netlify.toml` sets the publish directory).
 
+The landing page rewrites the address bar to `/home`, `/work` and `/my-story` as you
+scroll, so those three paths all resolve to `home.html`.
+
+## Keeping it in sync
+
+```bash
+python3 tools/sync_runtime.py            # fetch runtime modules/assets that are missing
+python3 tools/sync_runtime.py --dry-run  # just list them
+```
+
+The GitHub Actions workflow `.github/workflows/sync-assets.yml` runs the same walk
+against the live origin and commits whatever it finds.
+
 ## Provenance
 
-The files were mirrored from the live origin with `wget --recursive --page-requisites`
-(see `.github/workflows/grab-reference.yml`), the `<video>` files were pulled separately,
-and every `https://therishithakor.com/` reference inside the HTML was rewritten to `/`.
-No other edits were made.
+The files were mirrored from the live origin with `wget --recursive --page-requisites`,
+then the media that only exists as a runtime request — the `<video>` files, the
+photographer gallery, the artboard series, `vendor/lenis.min.mjs`, `vendor/three/` and
+the `ability-card/` document — was pulled by following each page's module graph
+(`tools/sync_runtime.py`). Every `https://therishithakor.com/` asset reference inside the
+HTML was rewritten to `/`. No other edits were made: markup, CSS and behaviour are
+the site's own.
 
 `goal.webm` and `situation.avi` are the reference recordings used while checking the clone
 against the live site; `tools/frames.sh` extracts frames from them at 30 fps.
