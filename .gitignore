@@ -25,3 +25,6 @@ clonne 2/
 %23w
 .netlify/
 *.1
+
+# browser screenshots produced by the shoot workflow
+_shots/
