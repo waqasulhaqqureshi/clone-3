@@ -43,17 +43,27 @@ same copy, same spacing, same motion. No redesigns, no new sections, no personal
   and a Google Analytics consent bar ("May I count your visit with Google Analytics?",
   No thanks / Allow).
 
+## Done since the last handoff
+
+- **"My story"** (`#story`) — sticky heading, four scroll-scrubbed odometer wheels, sticky
+  progress rail with an `NN / 05` counter, the five chapters verbatim, and centre-of-viewport
+  reading focus. See `SECTION-STORY-FOOTER.md`.
+- **Footer** (`#contact`) — back to top, click-to-enter pill, oversized `Rishi.` wordmark,
+  live local time, hire link.
+- **Consent bar** — inline details, persisted choice in `localStorage["rishi-consent"]`.
+- `formatClock` / `readTheme` / `readStored` / `writeStored` now live in `src/utils/site.ts`.
+  `STORY_ITEMS` at the top of `src/App.tsx` holds the timeline copy.
+
 ## Your task, in this order
 
-1. Build the **"My story" timeline section**: sticky heading, scroll-linked odometer digits
-   (0–9 rows scrubbing as you scroll), a vertical progress rail, and the five entries with the
-   exact copy above. Reuse the existing `--e-soft` / `--e-line` easings and `.reveal` primitives.
-   Must degrade to a plain readable list with `prefers-reduced-motion`.
-2. Build the **footer** + consent bar (dismissed state persisted in `localStorage`,
-   same storage-guard pattern as `rishi-mode`).
-3. Add the **ability card overlay** last, only if the owner asks for it.
-4. Keep divide-and-conquer: finish one section, `npx tsc --noEmit` + `npx vite build` +
-   the jsdom smoke test, then ask the owner for approval before starting the next section.
+1. Add the **ability card overlay** (`#card`): the trigger under the hero content, a
+   `win_bg` / `win_sub` / `plate` / `back` layered card that tilts with the pointer and flips on
+   tap, with the web 90 / UI-UX 85 / graphic 85 / app 75 readings. Assets must be generated or
+   drawn in CSS/SVG — the originals are not downloadable from this sandbox.
+2. Then a final fidelity pass against the reference: hero → doors → story → footer, at
+   390 / 768 / 1024 / 1440 / 1920, light and dark.
+3. Keep divide-and-conquer: finish one section, `npx tsc --noEmit` + `npx vite build` +
+   the jsdom smoke test in `/tmp/tools/smoke3.mjs`, then ask the owner for approval.
 
 ## Rules
 
