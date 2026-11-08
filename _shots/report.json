@@ -1,0 +1,213 @@
+[
+  {
+    "case": "home 1440",
+    "state": {
+      "mode": "light",
+      "ready": true,
+      "lite": false,
+      "navVisible": false,
+      "hunger": false
+    },
+    "errors": [
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-2.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-vault.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-brick.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-dice.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-expense.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-cliq.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-3.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-1.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-2.mp4 net::ERR_ABORTED"
+    ]
+  },
+  {
+    "case": "home 556",
+    "errors": [],
+    "state": {
+      "mode": "light"
+    }
+  },
+  {
+    "case": "home dark 1440",
+    "errors": [
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-2.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-vault.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-brick.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-expense.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-dice.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-cliq.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-1.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-2.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-3.mp4 net::ERR_ABORTED"
+    ]
+  },
+  {
+    "case": "story 1440",
+    "metrics": {
+      "railHeight": "1416px",
+      "railVar": "1416px",
+      "stageCols": "560px 616.031px",
+      "clockPos": "sticky",
+      "storyHeight": 1925,
+      "clockTop": 1.46875
+    },
+    "errors": [
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-2.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-vault.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-expense.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-brick.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-dice.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-cliq.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-1.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-3.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-2.mp4 net::ERR_ABORTED"
+    ]
+  },
+  {
+    "case": "story 556",
+    "errors": [
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED"
+    ]
+  },
+  {
+    "case": "hover portrait",
+    "canvas": {
+      "present": true,
+      "w": 542,
+      "h": 699,
+      "visible": "visible"
+    },
+    "hasFig": true,
+    "errors": [
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-2.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-expense.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-vault.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-brick.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-dice.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-cliq.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-3.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-1.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-2.mp4 net::ERR_ABORTED"
+    ]
+  },
+  {
+    "case": "doors 1440",
+    "errors": [
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-2.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-expense.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-vault.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-brick.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/app-developer/app-dice.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-cliq.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-1.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-2.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/ui-ux-designer/ux-3.mp4 net::ERR_ABORTED"
+    ]
+  },
+  {
+    "case": "web-developer 1440",
+    "errors": [
+      "http 404: http://127.0.0.1:5173/project-2.webp",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "http 404: http://127.0.0.1:5173/project-4.webp",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "http 404: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/.netlify/scripts/hud%3Fvariant=public net::ERR_ABORTED",
+      "http 404: http://127.0.0.1:5173/project-2.webp",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "http 404: http://127.0.0.1:5173/project-4.webp",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "http 404: http://127.0.0.1:5173/4-quicko-cg.webp",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "http 404: http://127.0.0.1:5173/1-zerodha.webp",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "http 404: http://127.0.0.1:5173/5-sandbox-cost.webp",
+      "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-2.mp4 net::ERR_ABORTED",
+      "404/failed: http://127.0.0.1:5173/web-developer/project-4.mp4 net::ERR_ABORTED"
+    ]
+  }
+]
