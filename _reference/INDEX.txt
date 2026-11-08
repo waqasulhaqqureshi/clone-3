@@ -1,20 +1,24 @@
        970  _reference/.resolv
+      5017  _reference/INDEX.txt
      75814  _reference/app-developer.html
      81926  _reference/graphic-designer.html
     442834  _reference/home.html
      16206  _reference/legal.html
     442834  _reference/my-story.html
      39247  _reference/photographer.html
-     35855  _reference/site/.netlify/scripts/hud?variant=public
+    161964  _reference/site/app-developer/app-brick.mp4
      49104  _reference/site/app-developer/app-brick.webp
+     96842  _reference/site/app-developer/app-dice.mp4
       4726  _reference/site/app-developer/app-dice.webp
+    287892  _reference/site/app-developer/app-expense.mp4
      24978  _reference/site/app-developer/app-expense.webp
+    373761  _reference/site/app-developer/app-vault.mp4
      19056  _reference/site/app-developer/app-vault.webp
       8998  _reference/site/app-developer/icon-brick.webp
       2364  _reference/site/app-developer/icon-dice.webp
       2340  _reference/site/app-developer/icon-expense.webp
       2572  _reference/site/app-developer/icon-vault.webp
-     76244  _reference/site/app-developer/index.html
+     75620  _reference/site/app-developer/index.html
       7138  _reference/site/apple-touch-icon.png
      94100  _reference/site/card/back.webp
        566  _reference/site/card/body.webp
@@ -36,7 +40,7 @@
      74736  _reference/site/graphic-designer/him-45.webp
      52654  _reference/site/graphic-designer/him-47.webp
      37986  _reference/site/graphic-designer/him-49.webp
-     82025  _reference/site/graphic-designer/index.html
+     81609  _reference/site/graphic-designer/index.html
      27222  _reference/site/graphic-designer/kal-2.webp
     106204  _reference/site/graphic-designer/kal-post-1.webp
      29884  _reference/site/graphic-designer/kal-post-2.webp
@@ -67,16 +71,22 @@
      80790  _reference/site/graphic-designer/wbt-kumbh-1.webp
      76850  _reference/site/graphic-designer/wbt-railway-1.webp
      70794  _reference/site/graphic-designer/wbt-stadium-1.webp
-    442709  _reference/site/home.html
+    442371  _reference/site/home.html
       7744  _reference/site/icon-192.png
-     16215  _reference/site/legal/index.html
+     19569  _reference/site/icon-512.png
+     15825  _reference/site/legal/index.html
      13287  _reference/site/legal/licenses.txt
-     39248  _reference/site/photographer/index.html
+     67648  _reference/site/og.jpg
+     38858  _reference/site/photographer/index.html
       8689  _reference/site/photographer/photos.js
-     66396  _reference/site/ui-ux-designer/index.html
+     65798  _reference/site/ui-ux-designer/index.html
+   1803798  _reference/site/ui-ux-designer/ux-1.mp4
      48636  _reference/site/ui-ux-designer/ux-1.webp
+    673030  _reference/site/ui-ux-designer/ux-2.mp4
      33954  _reference/site/ui-ux-designer/ux-2.webp
+    518135  _reference/site/ui-ux-designer/ux-3.mp4
      40204  _reference/site/ui-ux-designer/ux-3.webp
+    295308  _reference/site/ui-ux-designer/ux-cliq.mp4
      24202  _reference/site/ui-ux-designer/ux-cliq.webp
     119614  _reference/site/ui-ux-designer/ux-pnl.webp
     119614  _reference/site/web-developer/1-zerodha.webp
@@ -84,8 +94,10 @@
     147140  _reference/site/web-developer/3-capital-gains.webp
      88388  _reference/site/web-developer/4-quicko-cg.webp
     100402  _reference/site/web-developer/5-sandbox-cost.webp
-     69618  _reference/site/web-developer/index.html
+     69072  _reference/site/web-developer/index.html
+   1072723  _reference/site/web-developer/project-2.mp4
      24804  _reference/site/web-developer/project-2.webp
+    177208  _reference/site/web-developer/project-4.mp4
       8972  _reference/site/web-developer/project-4.webp
      66001  _reference/ui-ux-designer.html
      69311  _reference/web-developer.html
