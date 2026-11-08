@@ -43,3 +43,5 @@ jobs:
           git fetch -q origin
           git rebase -q origin/${{ github.ref_name }} || true
           git push
+
+# touch: re-run the shooter
