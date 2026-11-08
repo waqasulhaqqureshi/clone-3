@@ -1,0 +1,168 @@
+[
+  {
+    "case": "home 1440",
+    "state": {
+      "mode": "light",
+      "ready": true,
+      "lite": false,
+      "navVisible": false,
+      "hunger": false
+    },
+    "errors": [
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/app-developer/app-expense.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-dice.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-vault.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-brick.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-cliq.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/web-developer/project-2.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-3.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-2.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-1.mp4 net::ERR_ABORTED"
+    ]
+  },
+  {
+    "case": "home 556",
+    "errors": [
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25"
+    ],
+    "state": {
+      "mode": "light"
+    }
+  },
+  {
+    "case": "home dark 1440",
+    "errors": [
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-2.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-cliq.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-3.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-1.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-vault.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-dice.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-brick.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-expense.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/web-developer/project-2.mp4 net::ERR_ABORTED"
+    ]
+  },
+  {
+    "case": "story 1440",
+    "metrics": {
+      "railHeight": "1416px",
+      "railVar": "1416px",
+      "stageCols": "560px 616.031px",
+      "clockPos": "sticky",
+      "storyHeight": 1925,
+      "clockTop": 1.46875
+    },
+    "errors": [
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-2.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-cliq.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-3.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-1.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/web-developer/project-2.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-dice.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-expense.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-vault.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-brick.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25"
+    ]
+  },
+  {
+    "case": "story 556",
+    "errors": [
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25"
+    ]
+  },
+  {
+    "case": "hover portrait",
+    "canvas": {
+      "present": false
+    },
+    "hasFig": true,
+    "errors": [
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/app-developer/app-brick.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-dice.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-expense.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-vault.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/web-developer/project-2.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-cliq.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-2.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-3.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-1.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25"
+    ]
+  },
+  {
+    "case": "doors 1440",
+    "errors": [
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/app-developer/app-brick.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-expense.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-vault.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/app-developer/app-dice.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-2.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-cliq.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-3.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/web-developer/project-2.mp4 net::ERR_ABORTED",
+      "404/failed: https://therishithakor.com/ui-ux-designer/ux-1.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25"
+    ]
+  },
+  {
+    "case": "web-developer 1440",
+    "errors": [
+      "404/failed: https://therishithakor.com/web-developer/project-4.mp4 net::ERR_ABORTED",
+      "console: Refused to execute inline script because it violates the following Content Security Policy directive: \"script-src 'self' 'wasm-unsafe-eval' 'sha256-+/EV9+z0Z42mObtDesrjNRcphpBtWnoT/IkFUj8WKjI=' 'sha25",
+      "404/failed: https://therishithakor.com/web-developer/project-2.mp4 net::ERR_ABORTED"
+    ]
+  },
+  {
+    "case": "web-developer/ canonical",
+    "media404": 0,
+    "sample": [],
+    "errors": []
+  },
+  {
+    "case": "hover 760",
+    "canvas": {
+      "present": false
+    },
+    "errors": []
+  },
+  {
+    "case": "web-developer dark",
+    "mode": "dark",
+    "errors": []
+  }
+]
