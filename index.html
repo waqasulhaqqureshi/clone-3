@@ -3,15 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rishi Thakor - Freelance Web &amp; App Developer, UI/UX Designer</title>
-    <meta
-      name="description"
-      content="Freelance developer and designer building websites, iOS apps and brand design for clients worldwide."
-    />
+    <meta name="description" content="Freelance developer and designer building websites, iOS apps and brand design for clients worldwide." />
     <meta name="theme-color" content="#1A1818" />
-    <link rel="icon" href="/favicon.ico" sizes="48x48" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="preload" href="/fonts/onest-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/onest-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <script>
+      try {
+        if (localStorage.getItem("rishi-mode") === "dark") document.documentElement.dataset.mode = "dark";
+      } catch {
+        // The page defaults to light mode when storage is unavailable.
+      }
+    </script>
+    <title>Rishi Thakor | Freelance Web &amp; App Developer, UI/UX Designer</title>
   </head>
   <body>
     <div id="root"></div>
