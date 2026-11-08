@@ -1,0 +1,108 @@
+name: sync-assets
+
+# The site is mirrored already; this job only pulls media that the crawler could
+# not see because the pages build those urls in JavaScript at runtime
+# (the photographer gallery and the graphic-designer series).
+on:
+  push:
+    branches: ["arena/**"]
+    paths: [".github/workflows/sync-assets.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find referenced-but-missing media and fetch it
+        run: |
+          python3 - <<'PY'
+          import json, os, re, glob, subprocess, posixpath
+
+          BASE = "https://therishithakor.com/"
+          targets = set()
+
+          p = "photographer/photos.js"
+          if os.path.isfile(p):
+              js = open(p, encoding="utf-8").read()
+              arr = json.loads(js[js.index("["):js.rindex("]") + 1])
+              for e in arr:
+                  for k in ("t", "f"):
+                      if e.get(k):
+                          targets.add(("photographer", e[k]))
+
+          for page in ["home.html"] + glob.glob("*/index.html"):
+              d = os.path.dirname(page)
+              html = open(page, encoding="utf-8").read()
+              for m in re.finditer(
+                  r'["\']([A-Za-z0-9_\-/]+\.(?:webp|mp4|jpg|jpeg|png|webm|js|woff2|txt|ico))["\']', html):
+                  targets.add((d, m.group(1)))
+              for m in re.finditer(r'url\((["\']?)([^)"\']+)\1\)', html):
+                  u = m.group(2)
+                  if u.startswith(("data:", "http", "#")):
+                      continue
+                  targets.add((d, u))
+
+          missing = []
+          for d, name in sorted(targets):
+              rel = name.lstrip("/") if name.startswith("/") else posixpath.join(d, name)
+              rel = posixpath.normpath(rel)
+              if not os.path.isfile(rel):
+                  missing.append(rel)
+
+          print(f"{len(targets)} referenced assets, {len(missing)} missing")
+          for rel in missing:
+              print("  fetching", rel)
+
+          ok = fail = 0
+          total = 0
+          for rel in missing:
+              os.makedirs(os.path.dirname(rel) or ".", exist_ok=True)
+              r = subprocess.run(
+                  ["curl", "-sS", "-L", "--max-time", "120", "--retry", "2", "-o", rel, BASE + rel],
+                  capture_output=True, text=True)
+              size = os.path.getsize(rel) if os.path.isfile(rel) else 0
+              if r.returncode == 0 and size > 0:
+                  ok += 1
+                  total += size
+              else:
+                  fail += 1
+                  print("  FAILED", rel, r.stderr.strip()[:200])
+                  if os.path.isfile(rel):
+                      os.remove(rel)
+          print(f"downloaded {ok} files ({total/1e6:.1f} MB), {fail} failures")
+          with open("/tmp/sync-report.txt", "w") as f:
+              f.write(f"{len(targets)} referenced, {len(missing)} missing, {ok} fetched, {fail} failed\n")
+
+      - name: Re-index
+        run: |
+          python3 - <<'PY'
+          import os
+          files = []
+          for root, dirs, names in os.walk("."):
+              dirs[:] = [d for d in dirs if d not in {".git", ".github", "node_modules", "dist", "tools"}]
+              for n in names:
+                  p = os.path.join(root, n)
+                  files.append((p.lstrip("./"), os.path.getsize(p)))
+          files.sort()
+          with open("ASSETS.txt", "w") as f:
+              for p, s in files:
+                  f.write(f"{s:>10}  {p}\n")
+          print(f"{len(files)} files, {sum(s for _, s in files)/1e6:.1f} MB")
+          PY
+
+      - name: Commit
+        run: |
+          git config user.name "reference-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A
+          git commit -m "chore(assets): sync js-referenced media from the live site" || echo "nothing to commit"
+          git fetch -q origin
+          git rebase -q origin/${{ github.ref_name }} || true
+          git push
