@@ -1,5 +1,37 @@
     442834  %23w
+      7245  ASSETS.txt
       3243  README.md
+      9437  ability-card/back_clean.webp
+      9437  ability-card/back_clean_aux.webp
+      9437  ability-card/background.webp
+      9437  ability-card/frame.webp
+      9437  ability-card/frame_aux.webp
+      9437  ability-card/fx.webp
+    394727  ability-card/index.html
+      9437  ability-card/lineart.webp
+      9437  ability-card/lineart_df.webp
+      9437  ability-card/rays.webp
+      9437  ability-card/rose.webp
+      9437  ability-card/rose_aux.webp
+      9437  ability-card/shrine/src/altar.js
+      9437  ability-card/shrine/src/env.js
+      9437  ability-card/shrine/src/greatsword.js
+      9437  ability-card/shrine/src/plants.js
+      9437  ability-card/shrine/src/post.js
+      9437  ability-card/shrine/src/roots.js
+      9437  ability-card/shrine/src/util.js
+      9437  ability-card/shrine/src/vines.js
+      9437  ability-card/shrine/src/wire.js
+      9437  ability-card/shrine/src/world.js
+      9437  ability-card/shrine/stage.js
+      9437  ability-card/subject.webp
+      9437  ability-card/three/addons/loaders/GLTFLoader.js
+      9437  ability-card/three/addons/postprocessing/EffectComposer.js
+      9437  ability-card/three/addons/postprocessing/RenderPass.js
+      9437  ability-card/three/addons/postprocessing/ShaderPass.js
+      9437  ability-card/three/addons/postprocessing/UnrealBloomPass.js
+      9437  ability-card/three/addons/utils/BufferGeometryUtils.js
+      9437  ability-card/type.webp
       9437  app-developer/${p.lqip}
     161964  app-developer/app-brick.mp4
      49104  app-developer/app-brick.webp
@@ -23,6 +55,7 @@
       9162  card/win_bg.webp
      41994  card/win_sub.webp
       4037  favicon.ico
+     44336  fonts/eb-garamond-latin.woff2
      28452  fonts/onest-latin-ext.woff2
      33760  fonts/onest-latin.woff2
        246  gitignore
@@ -99,6 +132,7 @@
      15825  legal/index.html
      13287  legal/licenses.txt
        148  netlify.toml
+     35855  netlify/scripts/hud?variant=public
      67648  og.jpg
        378  package.json
       9437  photographer/${p.q}
@@ -173,6 +207,7 @@
     295308  ui-ux-designer/ux-cliq.mp4
      24202  ui-ux-designer/ux-cliq.webp
     119614  ui-ux-designer/ux-pnl.webp
+     18314  vendor/lenis.min.mjs
        405  vercel.json
     119614  web-developer/1-zerodha.webp
     161198  web-developer/2-tax-pnl.webp
