@@ -20,3 +20,8 @@ Thumbs.db
 
 # Separate git checkout (github.com/waqasulhaqqureshi/clonne-2)
 clonne 2/
+
+# Crawler artifacts (wget treats in-page anchors as files, Netlify injects a hud script)
+%23w
+.netlify/
+*.1
