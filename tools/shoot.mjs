@@ -5,6 +5,7 @@ import { chromium } from 'playwright'
 import { writeFileSync, mkdirSync } from 'node:fs'
 
 const BASE = process.env.BASE || 'http://127.0.0.1:5173'
+const PREFIX = process.env.PREFIX || ''
 mkdirSync('_shots', { recursive: true })
 
 const report = []
@@ -36,8 +37,8 @@ async function open({ width = 1440, height = 900, dark = false, url = '/home' })
 }
 
 async function shot(page, name) {
-  await page.screenshot({ path: `_shots/${name}.jpg`, type: 'jpeg', quality: 78 })
-  return `_shots/${name}.jpg`
+  await page.screenshot({ path: `_shots/${PREFIX}${name}.jpg`, type: 'jpeg', quality: 78 })
+  return `_shots/${PREFIX}${name}.jpg`
 }
 
 const cases = []
@@ -199,7 +200,7 @@ const cases = []
 
 await browser.close()
 
-writeFileSync('_shots/report.json', JSON.stringify(cases, null, 2))
+writeFileSync(`_shots/${PREFIX}report.json`, JSON.stringify(cases, null, 2))
 for (const c of cases) {
   console.log(`\n== ${c.case}`)
   if (c.state) console.log('  state:', JSON.stringify(c.state))
