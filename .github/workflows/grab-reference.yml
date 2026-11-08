@@ -13,16 +13,39 @@ jobs:
       - uses: actions/checkout@v4
       - name: Mirror the reference site
         run: |
+          sudo apt-get -qq update >/dev/null 2>&1 || true
+          sudo apt-get -qq install -y wget >/dev/null 2>&1 || true
           mkdir -p _reference
-          cp /etc/resolv.conf _reference/.resolv 2>/dev/null || true
-          for p in home work my-story web-developer app-developer ui-ux-designer graphic-designer photographer legal; do
-            curl -sSL --retry 3 -o "_reference/$p.html" "https://therishithakor.com/$p" || true
-          done
-          echo "fetched:"; ls -la _reference | head -20
+          wget --no-verbose --no-check-certificate -e robots=off \
+            --recursive --level=4 --page-requisites --adjust-extension --convert-links \
+            --domains=therishithakor.com,cdn.prod.website-files.com,uploads-ssl.webflow.com,d3e54v103j8qbb.cloudfront.net \
+            --reject-regex '\.(mp4|webm|mov|zip|avi)$' \
+            --no-host-directories --directory-prefix=_reference/site \
+            --timeout=25 --tries=2 --waitretry=2 \
+            "https://therishithakor.com/home" 2>&1 | tail -20 || true
+          echo "--- tree ---"
+          find _reference -type f | wc -l
+          du -sh _reference
+      - name: Prune huge files and index what we got
+        run: |
+          find _reference -type f -size +4M -print -delete
+          python3 - <<'PY'
+          import os, json
+          files = []
+          for root, _, names in os.walk("_reference"):
+              for n in names:
+                  p = os.path.join(root, n)
+                  files.append((p, os.path.getsize(p)))
+          files.sort()
+          with open("_reference/INDEX.txt", "w") as f:
+              for p, s in files:
+                  f.write(f"{s:>10}  {p}\n")
+          print(f"{len(files)} files, {sum(s for _, s in files)/1e6:.1f} MB")
+          PY
       - name: Commit
         run: |
           git config user.name "reference-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add _reference
-          git commit -m "chore: reference html" || echo "nothing"
+          git add -A _reference
+          git commit -m "chore(reference): mirror css, fonts and imagery from the live site" || echo "nothing to commit"
           git push
