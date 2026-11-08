@@ -60,6 +60,13 @@ async function resolve (pathname) {
     return { file: path.join(ROOT, 'home.html'), status: 200 }
   }
 
+  // a directory page is served at /name/ — the pages build their media urls from
+  // location.pathname, so the trailing slash has to be there or they resolve to /
+  if (!path.extname(clean) && !clean.endsWith('/')) {
+    const index = await isFile(path.join(target, 'index.html'))
+    if (index) return { redirect: clean + '/' }
+  }
+
   const candidates = [target]
   if (!path.extname(clean)) {
     candidates.push(target + '.html', path.join(target, 'index.html'))

@@ -119,11 +119,17 @@ const cases = []
       await page.mouse.move(box.x + box.width * (0.25 + i * 0.035), box.y + box.height * (0.3 + (i % 5) * 0.09))
       await page.waitForTimeout(45)
     }
-    await page.waitForTimeout(500)
   }
   const canvas = await page.evaluate(() => {
     const c = document.querySelector('#figCanvas')
-    return c ? { present: true, w: c.width, h: c.height, visible: getComputedStyle(c).visibility } : { present: false }
+    if (!c) return { present: false }
+    const ctx = c.getContext('2d')
+    let alpha = 0
+    try {
+      const d = ctx.getImageData(0, 0, c.width, c.height).data
+      for (let i = 3; i < d.length; i += 4000) alpha += d[i]
+    } catch { alpha = -1 }
+    return { present: true, w: c.width, h: c.height, visible: getComputedStyle(c).visibility, alpha }
   })
   await shot(page, 'hover-portrait-1440')
   cases.push({ case: 'hover portrait', canvas, hasFig: !!box, errors })
@@ -145,6 +151,49 @@ const cases = []
   const { context, page, errors } = await open({ width: 1440, height: 900, url: '/web-developer' })
   await shot(page, 'webdev-1440')
   cases.push({ case: 'web-developer 1440', errors })
+  await context.close()
+}
+
+// 9. the door page at its canonical url
+{
+  const { context, page, errors } = await open({ width: 1440, height: 900, url: '/web-developer/' })
+  const notFound = errors.filter((e) => e.includes('http 404'))
+  await shot(page, 'webdev-canonical-1440')
+  cases.push({ case: 'web-developer/ canonical', media404: notFound.length, sample: notFound.slice(0, 5), errors: [] })
+  await context.close()
+}
+
+// 10. portrait hover on a narrow window (used to be switched off below 1024px)
+{
+  const { context, page } = await open({ width: 760, height: 900 })
+  const box = await page.locator('#fig').boundingBox()
+  if (box) {
+    for (let i = 0; i < 14; i++) {
+      await page.mouse.move(box.x + box.width * (0.25 + i * 0.035), box.y + box.height * (0.3 + (i % 5) * 0.09))
+      await page.waitForTimeout(40)
+    }
+  }
+  const canvas = await page.evaluate(() => {
+    const c = document.querySelector('#figCanvas')
+    if (!c) return { present: false }
+    let alpha = 0
+    try {
+      const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+      for (let i = 3; i < d.length; i += 4000) alpha += d[i]
+    } catch { alpha = -1 }
+    return { present: true, w: c.width, h: c.height, alpha }
+  })
+  await shot(page, 'hover-760')
+  cases.push({ case: 'hover 760', canvas, errors: [] })
+  await context.close()
+}
+
+// 11. a door page with the stored dark preference
+{
+  const { context, page, errors } = await open({ width: 1440, height: 900, dark: true, url: '/web-developer/' })
+  const mode = await page.evaluate(() => document.documentElement.dataset.mode || 'light')
+  await shot(page, 'webdev-dark-1440')
+  cases.push({ case: 'web-developer dark', mode, errors: [] })
   await context.close()
 }
 
