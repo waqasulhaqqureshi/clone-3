@@ -16,4 +16,15 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  server: {
+    host: "0.0.0.0",
+    // The sandbox proxies the dev server through a generated *.e2b.app host.
+    // Without this the preview iframe is rejected with a 403.
+    allowedHosts: [".e2b.app", ".arena.ai", "localhost"],
+    cors: true,
+  },
+  preview: {
+    host: "0.0.0.0",
+    allowedHosts: [".e2b.app", ".arena.ai", "localhost"],
+  },
 });

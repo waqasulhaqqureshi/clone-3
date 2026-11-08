@@ -119,8 +119,25 @@ function IntroLoader({ onReady }: { onReady: () => void }) {
     let raf = 0;
     let outTimer = 0;
     let removeTimer = 0;
+    let cancelled = false;
     const started = performance.now() + 90;
     const duration = 1120;
+
+    // Hold the curtain until the Onest subsets and the hero portrait are
+    // really decoded; otherwise the headline reflows the moment it appears.
+    const assetsReady = Promise.race([
+      Promise.all([
+        document.fonts?.ready ?? Promise.resolve(),
+        new Promise<void>((resolve) => {
+          const image = new Image();
+          image.onload = () => resolve();
+          image.onerror = () => resolve();
+          image.src = "/assets/rishi-portrait.webp";
+          if (image.complete) resolve();
+        }),
+      ]),
+      new Promise<void>((resolve) => window.setTimeout(resolve, 2600)),
+    ]);
 
     const tick = (now: number) => {
       const progress = Math.max(0, Math.min(1, (now - started) / duration));
@@ -142,15 +159,20 @@ function IntroLoader({ onReady }: { onReady: () => void }) {
         return;
       }
 
-      outTimer = window.setTimeout(() => {
-        onReady();
-        loaderRef.current?.classList.add("out");
-        removeTimer = window.setTimeout(() => setVisible(false), 980);
-      }, 140);
+      void assetsReady.then(() => {
+        if (cancelled) return;
+        outTimer = window.setTimeout(() => {
+          if (cancelled) return;
+          onReady();
+          loaderRef.current?.classList.add("out");
+          removeTimer = window.setTimeout(() => setVisible(false), 980);
+        }, 140);
+      });
     };
 
     raf = requestAnimationFrame(tick);
     return () => {
+      cancelled = true;
       cancelAnimationFrame(raf);
       window.clearTimeout(outTimer);
       window.clearTimeout(removeTimer);
@@ -207,16 +229,53 @@ function IntroLoader({ onReady }: { onReady: () => void }) {
 function Header({ menuOpen, onMenu }: { menuOpen: boolean; onMenu: () => void }) {
   const [now, setNow] = useState(() => new Date());
   const [stuck, setStuck] = useState(false);
+  const [activeSection, setActiveSection] = useState("#home");
   const clock = formatClock(now);
 
   useEffect(() => {
+    const ids = NAV_ITEMS.filter((item) => item.href.startsWith("#")).map((item) => item.href);
+    const sections = ids
+      .map((id) => document.querySelector(id))
+      .filter((node): node is Element => Boolean(node));
+    if (!sections.length || !("IntersectionObserver" in window)) return;
+
+    const seen = new Map<Element, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => seen.set(entry.target, entry.intersectionRatio));
+        let best = "#home";
+        let bestRatio = 0;
+        seen.forEach((ratio, node) => {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            best = `#${node.id}`;
+          }
+        });
+        if (bestRatio > 0) setActiveSection(best);
+      },
+      { threshold: [0.15, 0.35, 0.6], rootMargin: "-20% 0px -35% 0px" }
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 10_000);
-    const update = () => setStuck(window.scrollY > 24);
-    window.addEventListener("scroll", update, { passive: true });
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setStuck(window.scrollY > 24);
+    };
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
     update();
     return () => {
       window.clearInterval(timer);
-      window.removeEventListener("scroll", update);
+      window.removeEventListener("scroll", onScroll);
+      window.cancelAnimationFrame(frame);
     };
   }, []);
 
@@ -225,12 +284,19 @@ function Header({ menuOpen, onMenu }: { menuOpen: boolean; onMenu: () => void })
       <div className="shell hdr__in">
         <nav aria-label="Primary navigation">
           <ul className="nav">
-            {NAV_ITEMS.map((item, index) => (
+            {NAV_ITEMS.map((item) => (
               <li key={item.label}>
                 <a
                   href={item.href}
-                  aria-current={index === 0 ? "page" : undefined}
-                  onClick={item.href === "#home" ? () => window.scrollTo({ top: 0, behavior: "smooth" }) : undefined}
+                  aria-current={item.href === activeSection ? "true" : undefined}
+                  onClick={
+                    item.href === "#home"
+                      ? (event) => {
+                          event.preventDefault();
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }
+                      : undefined
+                  }
                 >
                   <span>{item.label}</span>
                 </a>
@@ -346,7 +412,9 @@ function PullCord({ theme, onToggle }: { theme: Theme; onToggle: () => void }) {
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
       const width = Math.min(viewportWidth, 340);
-      const anchor = width - (viewportWidth >= 1200 ? 58 : 34);
+      // Keep the cord inside its own viewBox, otherwise the knob (and its hit
+      // target) is clipped on narrow screens and dark mode becomes unreachable.
+      const anchor = width - (viewportWidth >= 1200 ? 58 : Math.min(34, width * 0.12));
       const length =
         viewportWidth >= 1024
           ? Math.min(270, Math.max(190, viewportHeight * 0.3))
@@ -396,6 +464,9 @@ function PullCord({ theme, onToggle }: { theme: Theme; onToggle: () => void }) {
   };
 
   const onPointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    // On touch the hit area used to eat the vertical swipe, which made the
+    // top-right corner of the page feel dead. Let the page scroll instead.
+    if (event.pointerType === "touch") return;
     event.preventDefault();
     cancelAnimationFrame(springFrame.current);
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -481,6 +552,10 @@ function PullCord({ theme, onToggle }: { theme: Theme; onToggle: () => void }) {
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         onKeyDown={onKeyDown}
+        onClick={(event) => {
+          // Keyboard and touch activation. Mouse users get the drag release.
+          if (event.detail === 0 || active.current === false) onToggle();
+        }}
       />
     </div>
   );
@@ -661,6 +736,8 @@ export default function App() {
     setTheme((current) => (current === "dark" ? "light" : "dark"));
   }, []);
 
+  const [portraitFailed, setPortraitFailed] = useState(false);
+
   useEffect(() => {
     const root = document.documentElement;
     if (theme === "dark") root.dataset.mode = "dark";
@@ -714,8 +791,7 @@ export default function App() {
     if (!stage || !canvas) return;
 
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!finePointer || reducedMotion) {
+    if (!finePointer) {
       canvas.style.display = "none";
       return;
     }
@@ -728,6 +804,7 @@ export default function App() {
 
     const colorImage = new Image();
     colorImage.decoding = "async";
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
     const points: Array<{ x: number; y: number }> = [];
     let width = 1;
@@ -737,6 +814,14 @@ export default function App() {
     let idleFrames = 0;
     let running = false;
     let animationFrame = 0;
+    let introTimer = 0;
+    let destroyed = false;
+
+    const STARTS = [
+      { x: 0.5, y: 0.3 },
+      { x: 0.45, y: 0.36 },
+      { x: 0.55, y: 0.24 },
+    ];
 
     const drawPortrait = (target: CanvasRenderingContext2D) => {
       target.clearRect(0, 0, width, height);
@@ -798,12 +883,51 @@ export default function App() {
       animationFrame = requestAnimationFrame(frame);
     };
 
+    const start = () => {
+      if (destroyed || !colorImage.naturalWidth || !width) return;
+      if (!running) {
+        running = true;
+        idleFrames = 0;
+        animationFrame = requestAnimationFrame(frame);
+      }
+    };
+
+    /* The reference reveals the colour portrait with a brush that sweeps on by
+       itself once, then hands the brush to the cursor. Nothing used to paint on
+       first load, so the figure stayed flat grey until the visitor moved. */
+    const intro = () => {
+      if (destroyed) return;
+      if (reducedMotion) {
+        points.push({ x: width / 2, y: height * 0.42 });
+        start();
+        return;
+      }
+      let step = 0;
+      const total = 26;
+      const tick = () => {
+        if (destroyed) return;
+        const progress = step / total;
+        STARTS.forEach((origin, index) => {
+          const angle = progress * Math.PI * 1.7 + index * 2.1;
+          const spread = brushRadius * (0.5 + progress * 1.9);
+          points.push({
+            x: width * origin.x + Math.cos(angle) * spread,
+            y: height * origin.y + Math.sin(angle) * spread * 1.15,
+          });
+        });
+        start();
+        step += 1;
+        if (step <= total) introTimer = window.setTimeout(tick, 34);
+      };
+      introTimer = window.setTimeout(tick, 260);
+    };
+
     const onPointerMove = (event: PointerEvent) => {
       const bounds = stage.getBoundingClientRect();
       const relativeX = (event.clientX - window.innerWidth / 2) / Math.max(window.innerWidth / 2, 1);
       const relativeY = (event.clientY - window.innerHeight / 2) / Math.max(window.innerHeight / 2, 1);
-      stage.style.setProperty("--portrait-x", `${(-relativeX * 5).toFixed(2)}px`);
-      stage.style.setProperty("--portrait-y", `${(-relativeY * 4).toFixed(2)}px`);
+      stage.style.setProperty("--portrait-x", `${(-relativeX * 7).toFixed(2)}px`);
+      stage.style.setProperty("--portrait-y", `${(-relativeY * 5).toFixed(2)}px`);
       if (!colorImage.naturalWidth) return;
 
       const x = (event.clientX - bounds.left) * ratio;
@@ -826,55 +950,88 @@ export default function App() {
         points.push({ x, y });
       }
       previous = { x, y };
-
-      if (!running) {
-        running = true;
-        idleFrames = 0;
-        animationFrame = requestAnimationFrame(frame);
-      }
+      start();
     };
 
-    colorImage.onload = resize;
-    const observer = new ResizeObserver(resize);
+    const onLeave = () => {
+      previous = null;
+    };
+
+    colorImage.onload = () => {
+      resize();
+      intro();
+    };
+    const observer = new ResizeObserver(() => {
+      resize();
+      // A resize wipes the mask; re-seed the colour so the figure never
+      // flickers back to flat grey on rotate.
+      if (colorImage.naturalWidth) intro();
+    });
     observer.observe(stage);
     window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("pointerleave", onLeave);
+    window.addEventListener("blur", onLeave);
     resize();
     colorImage.src = "/assets/rishi-portrait-color.webp";
 
     return () => {
+      destroyed = true;
       observer.disconnect();
       window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("blur", onLeave);
+      window.clearTimeout(introTimer);
       cancelAnimationFrame(animationFrame);
       stage.style.removeProperty("--portrait-x");
       stage.style.removeProperty("--portrait-y");
     };
   }, []);
 
+  const flipTimer = useRef(0);
+
   useEffect(() => {
     if (!isReady || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let timer = 0;
     let live = true;
 
     const flip = () => {
       if (!live) return;
       if (document.hidden) {
-        timer = window.setTimeout(flip, 600);
+        flipTimer.current = window.setTimeout(flip, 600);
         return;
       }
       setIsFlipping(true);
-      timer = window.setTimeout(() => {
+      flipTimer.current = window.setTimeout(() => {
         if (!live) return;
         setSkillIndex((index) => (index + 1) % SKILLS.length);
         setIsFlipping(false);
-        timer = window.setTimeout(flip, 1700);
+        flipTimer.current = window.setTimeout(flip, 1900);
       }, 1250);
     };
 
-    timer = window.setTimeout(flip, 1350);
+    flipTimer.current = window.setTimeout(flip, 1500);
     return () => {
       live = false;
-      window.clearTimeout(timer);
+      window.clearTimeout(flipTimer.current);
     };
+  }, [isReady]);
+
+  // Tab-away pauses the role cycle instead of burning frames in the background.
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.hidden) window.clearTimeout(flipTimer.current);
+      else if (isReady) {
+        window.clearTimeout(flipTimer.current);
+        flipTimer.current = window.setTimeout(() => {
+          setIsFlipping(true);
+          window.setTimeout(() => {
+            setSkillIndex((index) => (index + 1) % SKILLS.length);
+            setIsFlipping(false);
+          }, 1250);
+        }, 600);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
   }, [isReady]);
 
   const holes = Array.from({ length: ringCount }, (_, index) => <i key={index} />);
@@ -891,15 +1048,24 @@ export default function App() {
       <main id="home" className="hero" aria-label="Introduction">
         <div className="hero__vig" aria-hidden="true" />
         <div className="hero__stage">
-          <div className="fig" id="fig" ref={figureRef}>
-            <img
-              id="figBase"
-              src="/assets/rishi-portrait.webp"
-              alt=""
-              decoding="async"
-              fetchPriority="high"
-              aria-hidden="true"
-            />
+          <div className="fig" id="fig" ref={figureRef} data-failed={portraitFailed ? "" : undefined}>
+            {portraitFailed ? (
+              <span className="fig__fallback" aria-hidden="true">
+                R
+              </span>
+            ) : (
+              <img
+                id="figBase"
+                src="/assets/rishi-portrait.webp"
+                alt=""
+                decoding="async"
+                fetchPriority="high"
+                width={662}
+                height={1600}
+                onError={() => setPortraitFailed(true)}
+                aria-hidden="true"
+              />
+            )}
             <canvas id="figCanvas" ref={portraitCanvasRef} aria-hidden="true" />
           </div>
         </div>
