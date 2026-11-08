@@ -1,6 +1,6 @@
     442834  %23w
-      8819  ASSETS.txt
-      3243  README.md
+      9599  ASSETS.txt
+      4253  README.md
       9437  ability-card/back_clean.webp
       9437  ability-card/back_clean_aux.webp
       9437  ability-card/background.webp
@@ -132,7 +132,6 @@
      15825  legal/index.html
      13287  legal/licenses.txt
        148  netlify.toml
-     35855  netlify/scripts/hud?variant=public
      67648  og.jpg
        378  package.json
       9437  photographer/${p.q}
